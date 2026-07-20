@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>SF Knowledge — Architecture · Accor GSP</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#032D60;--blue:#0070D2;--sky:#00A1E0;--light:#F8FAFC;--border:#E2E8F0;--text:#1E293B;--muted:#64748B;--red:#DC2626;--green:#16A34A;--purple:#7C3AED}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:var(--light);color:var(--text)}
+nav{background:var(--navy);padding:0 48px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.n-back{color:rgba(255,255,255,.65);text-decoration:none;font-size:12px}.n-back:hover{color:white}
+.n-title{color:white;font-size:13px;font-weight:600}
+.n-right{display:flex;gap:10px}
+.n-pill{text-decoration:none;padding:6px 14px;border-radius:5px;font-size:12px;font-weight:700}
+.n-deck{background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.2)}.n-deck:hover{background:rgba(255,255,255,.2)}
+.n-exec{background:var(--green);color:white}.n-exec:hover{opacity:.9}
+.hero{background:white;border-bottom:1px solid var(--border);padding:40px 48px;position:relative;overflow:hidden}
+.hero-inner{max-width:1060px;margin:0 auto}
+.hero-label{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.hero-title{font-size:34px;font-weight:900;color:var(--navy);line-height:1.1;margin-bottom:8px}
+.hero-desc{font-size:15px;color:var(--muted);line-height:1.6}
+.hero-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.hero-tag{display:inline-block;font-size:11px;font-weight:700;padding:4px 12px;border-radius:4px}
+.tag-green{background:#F0FDF4;border:1px solid #86EFAC;color:var(--green)}
+.tag-blue{background:#EFF6FF;border:1px solid #BFDBFE;color:var(--blue)}
+.content{max-width:1060px;margin:0 auto;padding:48px}
+.section-label{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px}
+.label-today{color:var(--red)}.label-sf{color:var(--blue)}
+.arch-compare{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:40px}
+.arch-card{background:white;border:1.5px solid var(--border);border-radius:16px;padding:32px}
+.arch-card.today{border-color:#FCA5A5}
+.arch-card.sf{border-color:#86EFAC;box-shadow:0 4px 24px rgba(22,163,74,.08)}
+
+/* TODAY: silo illustration */
+.silo-list{display:flex;flex-direction:column;gap:10px}
+.silo-item{display:flex;align-items:center;gap:12px;border-radius:10px;padding:12px 16px;border:1.5px solid}
+.silo-item.agent{background:#FFF5F5;border-color:#FCA5A5}
+.silo-item.gpt{background:#FFF5F5;border-color:#FCA5A5}
+.silo-item.bot{background:#FFF5F5;border-color:#FCA5A5}
+.si-icon{font-size:20px;flex-shrink:0}
+.si-name{font-size:13px;font-weight:700;color:var(--text)}
+.si-status{font-size:11px;color:var(--red);font-weight:600;margin-top:2px}
+.silo-center{background:#FEF2F2;border:2px dashed #FCA5A5;border-radius:10px;padding:16px 20px;margin:12px 0;text-align:center}
+.sc-name{font-size:14px;font-weight:800;color:var(--red)}
+.sc-sub{font-size:11px;color:var(--muted);margin-top:3px}
+.impact-list{display:flex;flex-direction:column;gap:10px;margin-top:16px;padding-top:16px;border-top:1px solid rgba(0,0,0,.06)}
+.impact-item{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text);line-height:1.4}
+.impact-item.pain .imp-icon{color:var(--red)}
+.imp-icon{flex-shrink:0;font-weight:700;font-size:13px;margin-top:1px}
+
+/* SF: Hub diagram */
+.hub-diagram{display:flex;flex-direction:column;align-items:center;gap:0}
+.hub-center{background:#F0FDF4;border:2px solid #86EFAC;border-radius:14px;padding:18px 28px;text-align:center;width:100%;max-width:340px}
+.hub-name{font-size:16px;font-weight:800;color:var(--green)}
+.hub-sub{font-size:12px;color:#166534;margin-top:4px}
+.hub-arrow-down{font-size:14px;color:var(--muted);padding:8px 0;text-align:center;width:100%;max-width:340px}
+.consumers-grid{display:flex;flex-direction:column;gap:8px;width:100%;max-width:340px}
+.consumer-item{background:white;border:1.5px solid var(--border);border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px;transition:border-color .2s}
+.consumer-item:hover{border-color:var(--green)}
+.ci-icon{font-size:18px;flex-shrink:0}
+.ci-name{font-size:13px;font-weight:700;color:var(--text)}
+.ci-desc{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* ARI Pilot callout */
+.ari-strip{background:#F0FDF4;border:2px solid #86EFAC;border-radius:12px;padding:16px 20px;margin-top:16px;display:flex;align-items:flex-start;gap:12px}
+.ari-pill{background:var(--green);color:white;font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:4px;flex-shrink:0}
+.ari-text{font-size:12px;color:#166534;font-weight:600;line-height:1.5}
+
+/* Data categories */
+.categories-section{background:white;border:1.5px solid var(--border);border-radius:16px;padding:32px;margin-bottom:24px}
+.cat-title{font-size:13px;font-weight:800;color:var(--navy);margin-bottom:16px}
+.cat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.cat-item{background:var(--light);border-radius:10px;padding:14px}
+.cat-item-title{font-size:12px;font-weight:800;color:var(--text);margin-bottom:6px}
+.cat-tags{display:flex;flex-wrap:wrap;gap:4px}
+.cat-tag{background:white;border:1px solid var(--border);color:var(--muted);font-size:10px;padding:2px 7px;border-radius:4px}
+.cat-tag.green{border-color:#86EFAC;color:var(--green);background:#F0FDF4}
+
+.tech-notes{background:white;border:1.5px solid var(--border);border-radius:16px;padding:32px;margin-bottom:40px}
+.tech-notes-title{font-size:13px;font-weight:800;color:var(--navy);margin-bottom:20px}
+.tech-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.tech-item{background:var(--light);border-radius:10px;padding:16px}
+.tech-item-title{font-size:12px;font-weight:800;color:var(--text);margin-bottom:6px}
+.tech-item-text{font-size:12px;color:var(--muted);line-height:1.5}
+.integration-note{background:linear-gradient(135deg,#F0FDF4,#EFF6FF);border:1.5px solid #86EFAC;border-radius:12px;padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px}
+.int-icon{font-size:28px;flex-shrink:0}
+.int-text{font-size:14px;color:var(--navy);line-height:1.5;font-weight:500}
+.int-text strong{font-weight:800}
+footer{border-top:1px solid var(--border);background:white;padding:16px 48px;display:flex;justify-content:space-between;align-items:center}
+.f-links{display:flex;gap:16px}
+.f-link{text-decoration:none;font-size:13px;color:var(--blue);font-weight:600}.f-link:hover{text-decoration:underline}
+.f-note{font-size:11px;color:#CBD5E1;font-style:italic}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="n-back">← Accueil</a>
+  <span class="n-title">Pilier 04 · SF Knowledge · Architecture</span>
+  <div class="n-right">
+    <a href="deck.html" class="n-pill n-deck">Présentation</a>
+    <a href="knowledge-exec.html" class="n-pill n-exec">Vue exec</a>
+  </div>
+  <img src="assets/sf-logo.png" alt="Salesforce" style="height:32px;flex-shrink:0">
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Architecture · Pilier 04 · SF Knowledge</div>
+    <div class="hero-title">1 base d'articles. Agents, bot et AccorGPT consomment la même source.</div>
+    <div class="hero-desc">SF Knowledge agit comme backbone : l'Agent Assist surface les articles en temps réel, le bot Agentforce répond en self-service, AccorGPT reçoit les articles comme contexte via BYOM.</div>
+    <div class="hero-tags">
+      <span class="hero-tag tag-green">✓ ARI Pilot en cours depuis juin 2026</span>
+      <span class="hero-tag tag-blue">✓ Natif Agentforce · 0 intégration custom</span>
+    </div>
+  </div>
+  <img src="assets/star.png" style="position:absolute;right:48px;bottom:20px;width:52px;opacity:.7;pointer-events:none" aria-hidden="true">
+  <img src="assets/star.png" style="position:absolute;right:100px;bottom:36px;width:34px;opacity:.5;pointer-events:none" aria-hidden="true">
+</div>
+
+<div class="content">
+  <div class="arch-compare">
+
+    <!-- TODAY -->
+    <div class="arch-card today">
+      <div class="section-label label-today">Architecture actuelle — 3 silos</div>
+      <div class="silo-list">
+        <div class="silo-item agent">
+          <span class="si-icon">👤</span>
+          <div><div class="si-name">Agent pendant l'appel</div><div class="si-status">Change d'application pour chercher dans Mayday</div></div>
+        </div>
+        <div class="silo-item gpt">
+          <span class="si-icon">🤖</span>
+          <div><div class="si-name">AccorGPT (use case 1, 2, 3…)</div><div class="si-status">Intégration API custom par UC = projet séparé</div></div>
+        </div>
+        <div class="silo-item bot">
+          <span class="si-icon">💬</span>
+          <div><div class="si-name">Bot digital</div><div class="si-status">Non connecté à Mayday — réponses non synchronisées</div></div>
+        </div>
+      </div>
+      <div class="silo-center">
+        <div class="sc-name">Mayday (outil externe)</div>
+        <div class="sc-sub">Login séparé · Pas d'API Agentforce native · Gouvernance articles isolée</div>
+      </div>
+      <div class="impact-list">
+        <div class="impact-item pain"><span class="imp-icon">✕</span><span class="imp-text">3 sources potentiellement désynchronisées — réponses incohérentes</span></div>
+        <div class="impact-item pain"><span class="imp-icon">✕</span><span class="imp-text">Chaque nouveau UC AccorGPT nécessite une intégration Mayday dédiée</span></div>
+        <div class="impact-item pain"><span class="imp-icon">✕</span><span class="imp-text">30s recherche moyenne × 3M appels/an = ~25 000h/an perdues</span></div>
+      </div>
+    </div>
+
+    <!-- SF TARGET -->
+    <div class="arch-card sf">
+      <div class="section-label label-sf">Architecture cible — SF Knowledge backbone</div>
+      <div class="hub-diagram">
+        <div class="hub-center">
+          <div class="hub-name">📚 SF Knowledge Base</div>
+          <div class="hub-sub">1 source de vérité · Gouvernance centralisée</div>
+        </div>
+        <div class="hub-arrow-down">distribue vers ↓</div>
+        <div class="consumers-grid">
+          <div class="consumer-item">
+            <span class="ci-icon">💡</span>
+            <div>
+              <div class="ci-name">Agent Assist</div>
+              <div class="ci-desc">Article suggéré en temps réel pendant la conversation active</div>
+            </div>
+          </div>
+          <div class="consumer-item">
+            <span class="ci-icon">🤖</span>
+            <div>
+              <div class="ci-name">Agentforce Bot</div>
+              <div class="ci-desc">Self-service — répond aux questions en s'appuyant sur les articles publiés</div>
+            </div>
+          </div>
+          <div class="consumer-item">
+            <span class="ci-icon">✨</span>
+            <div>
+              <div class="ci-name">AccorGPT via BYOM</div>
+              <div class="ci-desc">Articles injectés comme contexte dans le prompt — Knowledge Retrieval natif</div>
+            </div>
+          </div>
+          <div class="consumer-item">
+            <span class="ci-icon">🏢</span>
+            <div>
+              <div class="ci-name">8 UC groupe (vision Alix B.)</div>
+              <div class="ci-desc">Même base alimente les use cases enterprise — cohérence garantie</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ari-strip">
+        <div class="ari-pill">ARI Pilot</div>
+        <div class="ari-text">Migration Mayday → SF Knowledge en cours depuis juin 2026. Articles convertis, validés et publiés dans SF progressivement.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="categories-section">
+    <div class="cat-title">Structure recommandée — Data Categories SF Knowledge</div>
+    <div class="cat-grid">
+      <div class="cat-item">
+        <div class="cat-item-title">Par marque</div>
+        <div class="cat-tags">
+          <span class="cat-tag green">Fairmont</span>
+          <span class="cat-tag green">Novotel</span>
+          <span class="cat-tag green">Ibis</span>
+          <span class="cat-tag green">Raffles</span>
+          <span class="cat-tag">+ 41 marques</span>
+        </div>
+      </div>
+      <div class="cat-item">
+        <div class="cat-item-title">Par sujet</div>
+        <div class="cat-tags">
+          <span class="cat-tag green">Annulation</span>
+          <span class="cat-tag green">Réservation</span>
+          <span class="cat-tag green">ALL loyalty</span>
+          <span class="cat-tag green">Check-in</span>
+          <span class="cat-tag">Procédures</span>
+        </div>
+      </div>
+      <div class="cat-item">
+        <div class="cat-item-title">Par langue / région</div>
+        <div class="cat-tags">
+          <span class="cat-tag green">FR</span>
+          <span class="cat-tag green">EN</span>
+          <span class="cat-tag green">ES</span>
+          <span class="cat-tag green">PT</span>
+          <span class="cat-tag">+ 20 langues</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="integration-note">
+    <div class="int-icon">🔗</div>
+    <div class="int-text">
+      <strong>Knowledge Retrieval pour AccorGPT BYOM :</strong> SF Agentforce supporte une action <em>Knowledge Retrieval</em> native — les articles pertinents sont récupérés et injectés dans le contexte du prompt envoyé à AccorGPT. Aucun pipeline RAG custom à développer — c'est natif dans le Trust Layer.
+    </div>
+  </div>
+
+  <div class="tech-notes">
+    <div class="tech-notes-title">⚙️ Notes techniques — pour l'équipe ingénierie</div>
+    <div class="tech-grid">
+      <div class="tech-item">
+        <div class="tech-item-title">Structure articles SF Knowledge</div>
+        <div class="tech-item-text">Articles organisés en Data Categories (marque, sujet, langue). Workflow publication : Draft → Review → Published. Versioning natif. Multi-langue avec articles liés.</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-item-title">Agent Assist — surfacing temps réel</div>
+        <div class="tech-item-text">Einstein analyse le transcript en cours et suggère les articles Knowledge correspondants. Activer dans Setup → Einstein for Service → Agent Assist. Aucun ML training requis.</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-item-title">BYOM — Knowledge Retrieval action</div>
+        <div class="tech-item-text">Action Agentforce native : <em>Search Knowledge</em>. Récupère les articles pertinents → injecte dans le prompt AccorGPT. Filtrage par Data Category possible pour cibler par marque/sujet.</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-item-title">Migration Mayday → SF Knowledge (ARI)</div>
+        <div class="tech-item-text">Export Mayday → import via SF Data Loader ou API bulk. Mapping des catégories Mayday vers Data Categories SF. Validation éditoriale avant publication. ARI Pilot : progression en cours depuis juin 2026.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="f-links">
+    <a href="knowledge-exec.html" class="f-link">← Vue exec</a>
+    <a href="deck.html" class="f-link">← Présentation complète</a>
+  </div>
+  <span class="f-note">Salesforce · Accor GSP 2026 · Architecture technique</span>
+</footer>
+</body>
+</html>

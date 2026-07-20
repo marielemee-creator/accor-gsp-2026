@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accor GSP 2026 — Salesforce</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#032D60;--blue:#0070D2;--sky:#00A1E0;
+  --white:#FFF;--light:#F8FAFC;--border:#E2E8F0;
+  --text:#1E293B;--muted:#64748B;
+  --red:#DC2626;--red-l:#FEF2F2;--blue-l:#EFF6FF;
+  --green:#16A34A;--purple:#7C3AED;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:var(--light);color:var(--text)}
+
+/* NAV */
+nav{background:var(--navy);padding:0 48px;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.nav-brand{display:flex;align-items:center;gap:14px}
+.cloud{color:white}
+.nav-title{color:rgba(255,255,255,.85);font-size:14px;font-weight:500}
+.nav-cta{background:var(--blue);color:white;text-decoration:none;padding:9px 20px;border-radius:6px;font-size:13px;font-weight:700;transition:background .2s}
+.nav-cta:hover{background:#005FB2}
+
+/* HERO */
+.hero{background:var(--navy);padding:80px 48px 96px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-200px;right:-100px;width:600px;height:600px;border-radius:50%;background:rgba(0,112,210,.12);pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--blue),var(--sky))}
+.hero-inner{max-width:1060px;margin:0 auto}
+.hero-tag{display:inline-block;background:rgba(255,255,255,.1);color:rgba(255,255,255,.8);font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:4px;margin-bottom:24px}
+.hero h1{font-size:56px;font-weight:900;color:white;line-height:1.05;margin-bottom:18px}
+.hero h1 em{color:var(--sky);font-style:normal}
+.hero p{font-size:18px;color:rgba(255,255,255,.7);margin-bottom:40px;line-height:1.6}
+.hero-actions{display:flex;gap:14px;align-items:center}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:white;color:var(--navy);text-decoration:none;padding:14px 28px;border-radius:8px;font-size:15px;font-weight:800;transition:all .2s}
+.btn-primary:hover{background:var(--sky);color:white;transform:translateY(-2px)}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;border:2px solid rgba(255,255,255,.25);color:rgba(255,255,255,.85);text-decoration:none;padding:12px 24px;border-radius:8px;font-size:15px;font-weight:600;transition:all .2s}
+.btn-ghost:hover{border-color:white;color:white}
+
+/* STATS */
+.stats{background:white;border-bottom:1px solid var(--border);padding:28px 48px}
+.stats-inner{max-width:1060px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:0}
+.stat{text-align:center;padding:0 48px;border-right:1px solid var(--border)}
+.stat:last-child{border-right:none}
+.stat-n{font-size:38px;font-weight:900;color:var(--blue);line-height:1}
+.stat-l{font-size:12px;color:var(--muted);margin-top:4px;font-weight:500}
+
+/* PILLARS */
+.section{max-width:1060px;margin:72px auto;padding:0 48px}
+.section-header{margin-bottom:40px}
+.section-header h2{font-size:30px;font-weight:900;color:var(--navy);margin-bottom:8px}
+.section-header p{font-size:15px;color:var(--muted)}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+
+.card{background:white;border:1.5px solid var(--border);border-radius:16px;padding:36px;transition:all .25s;position:relative;overflow:hidden;display:flex;flex-direction:column}
+.card-bar{position:absolute;top:0;left:0;right:0;height:4px;transform:scaleX(0);transform-origin:left;transition:transform .3s}
+.card:hover{border-color:var(--blue);box-shadow:0 8px 40px rgba(0,112,210,.12);transform:translateY(-3px)}
+.card:hover .card-bar{transform:scaleX(1)}
+
+.card-num{font-size:11px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--blue);margin-bottom:14px}
+.card-icon{width:52px;height:52px;background:var(--light);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:20px}
+.card h3{font-size:22px;font-weight:800;color:var(--text);margin-bottom:8px}
+.card-desc{font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:16px;flex:1}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.tag-b{background:var(--red-l);color:var(--red);padding:4px 10px;border-radius:4px;font-size:11px;font-weight:700}
+.tag-a{background:var(--blue-l);color:var(--blue);padding:4px 10px;border-radius:4px;font-size:11px;font-weight:700}
+.card-actions{display:flex;gap:10px;padding-top:20px;border-top:1px solid var(--border);margin-top:auto}
+.act{flex:1;text-decoration:none;padding:10px 0;border-radius:8px;font-size:13px;font-weight:700;text-align:center;transition:all .2s}
+.act-exec{background:var(--blue);color:white}
+.act-exec:hover{background:#005FB2}
+.act-arch{background:var(--light);color:var(--text);border:1.5px solid var(--border)}
+.act-arch:hover{background:var(--blue-l);border-color:var(--blue);color:var(--blue)}
+
+/* DECK PROMO */
+.deck-promo{background:linear-gradient(135deg,var(--navy) 0%,#0B3D78 100%);padding:72px 48px}
+.deck-promo-inner{max-width:1060px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:48px}
+.deck-promo h2{font-size:34px;font-weight:900;color:white;margin-bottom:10px}
+.deck-promo p{font-size:16px;color:rgba(255,255,255,.65)}
+
+/* FOOTER */
+footer{background:white;border-top:1px solid var(--border);padding:24px 48px;display:flex;align-items:center;justify-content:space-between}
+.footer-brand{font-size:13px;color:var(--muted);font-weight:500}
+.footer-note{font-size:11px;color:#CBD5E1;font-style:italic}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <svg class="cloud" width="32" height="22" viewBox="0 0 32 22" fill="none">
+      <path d="M6 13c0-2.8 2.3-5 5-5 .6 0 1.2.1 1.7.3C13.6 5.9 16.2 4 19.3 4c3.8 0 6.8 3 6.8 6.8v.2c1.3.4 2.3 1.7 2.3 3.2 0 1.9-1.5 3.4-3.4 3.4H6.9C4.7 17.6 3 16 3 14c0-1.7 1.3-3.1 3-3z" fill="white"/>
+    </svg>
+    <span class="nav-title">Salesforce · Accor GSP · Contact Center 2026</span>
+  </div>
+  <a href="deck.html" class="nav-cta">Voir la présentation →</a>
+  <img src="assets/sf-logo.png" alt="Salesforce" style="height:32px;margin-left:12px;flex-shrink:0">
+</nav>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Salesforce · Accor GSP · Juillet 2026</div>
+    <h1>GSP 2026 — 4 décisions,<br><em>1 plateforme.</em></h1>
+    <p>Simplifier le Contact Center, déployer l'IA, mettre les agents en situation de succès.</p>
+    <div class="hero-actions">
+      <a href="deck.html" class="btn-primary">Voir la présentation →</a>
+      <a href="#pillars" class="btn-ghost">Explorer les 4 piliers</a>
+    </div>
+  </div>
+  <img src="assets/star.png" style="position:absolute;right:48px;bottom:20px;width:56px;opacity:.7;pointer-events:none" aria-hidden="true">
+  <img src="assets/star.png" style="position:absolute;right:112px;bottom:36px;width:36px;opacity:.5;pointer-events:none" aria-hidden="true">
+</section>
+
+<div class="stats">
+  <div class="stats-inner">
+    <div class="stat"><div class="stat-n">1 100</div><div class="stat-l">agents</div></div>
+    <div class="stat"><div class="stat-n">4M</div><div class="stat-l">contacts / an</div></div>
+    <div class="stat"><div class="stat-n">5</div><div class="stat-l">outils aujourd'hui</div></div>
+    <div class="stat"><div class="stat-n">110</div><div class="stat-l">pays</div></div>
+    <div class="stat"><div class="stat-n">~€11M</div><div class="stat-l">ROI estimé / an</div></div>
+  </div>
+</div>
+
+<section class="section" id="pillars">
+  <div class="section-header">
+    <h2>4 piliers. 1 plateforme.</h2>
+    <p>Chaque pilier est indépendant · Add-on natif Service Cloud · Déploiement Q1 2027</p>
+  </div>
+
+  <div class="grid">
+    <!-- Voice -->
+    <div class="card">
+      <div class="card-bar" style="background:var(--blue)"></div>
+      <div class="card-num">Pilier 01</div>
+      <div class="card-icon">📞</div>
+      <h3>Service Cloud Voice</h3>
+      <p class="card-desc">La migration Amazon Connect est actée pour fév 2028. Intégrer l'IA sur la voix maintenant, pas dans 18 mois.</p>
+      <div class="tags">
+        <span class="tag-b">Aujourd'hui · 2 écrans · 0 IA</span>
+        <span class="tag-a">Demain · Work Summary auto · Agent Assist</span>
+      </div>
+      <div class="card-actions">
+        <a href="voice-exec.html" class="act act-exec">Vue exec</a>
+        <a href="voice-arch.html" class="act act-arch">Architecture →</a>
+      </div>
+    </div>
+
+    <!-- DE -->
+    <div class="card">
+      <div class="card-bar" style="background:#0EA5E9"></div>
+      <div class="card-num">Pilier 02</div>
+      <div class="card-icon">💬</div>
+      <h3>Digital Engagement</h3>
+      <p class="card-desc">Canal chat et messaging natif Salesforce. Traduction temps réel, bot Agentforce, profil ALL client contextuel dès l'ouverture.</p>
+      <div class="tags">
+        <span class="tag-b">Aujourd'hui · données séparées</span>
+        <span class="tag-a">Demain · Natif SF · Traduction · Bot</span>
+      </div>
+      <div class="card-actions">
+        <a href="de-exec.html" class="act act-exec">Vue exec</a>
+        <a href="de-arch.html" class="act act-arch">Architecture →</a>
+      </div>
+    </div>
+
+    <!-- Agentforce -->
+    <div class="card">
+      <div class="card-bar" style="background:var(--purple)"></div>
+      <div class="card-num">Pilier 03</div>
+      <div class="card-icon">🤖</div>
+      <h3>Agentforce + BYOM</h3>
+      <p class="card-desc">Déployer l'IA en 3–6 mois via Agentforce. AccorGPT reste le LLM souverain via BYOM — le Responsible AI Committee n'a rien à revoir.</p>
+      <div class="tags">
+        <span class="tag-b">Build interne · 18–24 mois</span>
+        <span class="tag-a">Agentforce · 3–6 mois · AccorGPT BYOM</span>
+      </div>
+      <div class="card-actions">
+        <a href="agentforce-exec.html" class="act act-exec">Vue exec</a>
+        <a href="agentforce-arch.html" class="act act-arch">Architecture →</a>
+      </div>
+    </div>
+
+    <!-- Knowledge -->
+    <div class="card">
+      <div class="card-bar" style="background:var(--green)"></div>
+      <div class="card-num">Pilier 04</div>
+      <div class="card-icon">📚</div>
+      <h3>SF Knowledge</h3>
+      <p class="card-desc">Remplacer Mayday par le backbone knowledge natif Salesforce. 1 source de vérité pour agents, bot et AccorGPT. ARI Pilot déjà en cours depuis juin 2026.</p>
+      <div class="tags">
+        <span class="tag-b">Aujourd'hui · Mayday · silo externe</span>
+        <span class="tag-a">Demain · SF Knowledge · natif IA</span>
+      </div>
+      <div class="card-actions">
+        <a href="knowledge-exec.html" class="act act-exec">Vue exec</a>
+        <a href="knowledge-arch.html" class="act act-arch">Architecture →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="deck-promo">
+  <div class="deck-promo-inner">
+    <div>
+      <h2>La présentation complète</h2>
+      <p>10 slides · ROI consolidé · Timeline de décision · Prêt pour Mengxing Wang</p>
+    </div>
+    <a href="deck.html" class="btn-primary">Ouvrir la présentation →</a>
+  </div>
+</section>
+
+<footer>
+  <span class="footer-brand">Salesforce · Accor GSP · Contact Center 2026</span>
+  <span class="footer-note">ROI estimations benchmarks hospitality — à valider avec données Accor réelles</span>
+</footer>
+
+</body>
+</html>

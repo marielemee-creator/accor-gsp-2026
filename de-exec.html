@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Digital Engagement — Vue Exec · Accor GSP</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#032D60;--blue:#0070D2;--sky:#00A1E0;--light:#F8FAFC;--border:#E2E8F0;--text:#0F172A;--muted:#64748B;--red:#DC2626}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:white;min-height:100vh;display:flex;flex-direction:column}
+nav{background:var(--navy);padding:0 48px;height:52px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.n-back{color:rgba(255,255,255,.65);text-decoration:none;font-size:12px}.n-back:hover{color:white}
+.n-title{color:white;font-size:13px;font-weight:600}
+.n-right{display:flex;gap:10px}
+.n-pill{text-decoration:none;padding:6px 14px;border-radius:5px;font-size:12px;font-weight:700}
+.n-deck{background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.2)}.n-deck:hover{background:rgba(255,255,255,.2)}
+.n-arch{background:var(--blue);color:white}.n-arch:hover{background:#005FB2}
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:48px}
+.slide{width:1060px}
+.label{font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.headline{font-size:40px;font-weight:900;color:var(--text);line-height:1.1;margin-bottom:24px}
+.headline em{color:var(--blue);font-style:normal}
+
+.diff-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
+.diff-item{background:#F8FAFC;border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;text-align:center}
+.diff-item.key{background:#F5F3FF;border-color:#C4B5FD}
+.diff-cat{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:6px}
+.diff-no{font-size:13px;font-weight:700;color:var(--red)}
+.diff-yes{font-size:13px;font-weight:700;color:var(--blue)}
+
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:40px}
+.col{padding:36px 40px 40px}
+.col-before{background:#FEF2F2;border-radius:16px 0 0 16px}
+.col-after{background:#EFF6FF;border-radius:0 16px 16px 0;box-shadow:inset 0 0 0 2px #BFDBFE}
+.col-tag{font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:24px;display:inline-block;padding:4px 12px;border-radius:20px}
+.tag-b{background:#FEE2E2;color:#B91C1C}
+.tag-a{background:#DBEAFE;color:#1D4ED8}
+.items{display:flex;flex-direction:column;gap:18px}
+.item{display:flex;align-items:center;gap:14px}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot-b{background:#EF4444}.dot-a{background:var(--blue)}
+.item-text{font-size:18px;font-weight:700;color:var(--text);line-height:1.3}
+.stat-block{margin-top:36px;padding-top:28px;border-top:1px solid rgba(0,0,0,.08)}
+.stat-num{font-size:52px;font-weight:900;letter-spacing:-2px;line-height:1}
+.stat-b{color:var(--red)}.stat-a{color:var(--blue)}
+.stat-lbl{font-size:13px;color:var(--muted);margin-top:6px;font-weight:500}
+.bottom{display:flex;align-items:center;gap:32px}
+.roi-box{background:var(--text);border-radius:14px;padding:24px 36px;flex-shrink:0;text-align:center}
+.roi-num{font-size:52px;font-weight:900;color:white;letter-spacing:-2px;line-height:1}
+.roi-lbl{font-size:12px;color:#64748B;margin-top:6px}
+.insight{font-size:18px;color:#334155;line-height:1.6;font-weight:500;flex:1;padding-left:32px;border-left:3px solid var(--blue)}
+.insight strong{color:var(--text);font-weight:800}
+.note{font-size:10px;color:#CBD5E1;margin-top:14px;font-style:italic}
+footer{border-top:1px solid var(--border);padding:16px 48px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.f-links{display:flex;gap:16px}
+.f-link{text-decoration:none;font-size:13px;color:var(--blue);font-weight:600}.f-link:hover{text-decoration:underline}
+.f-note{font-size:11px;color:#CBD5E1;font-style:italic}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="n-back">← Accueil</a>
+  <span class="n-title">Pilier 02 · Digital Engagement · Vue Exec</span>
+  <div class="n-right">
+    <a href="deck.html" class="n-pill n-deck">Présentation complète</a>
+    <a href="de-arch.html" class="n-pill n-arch">Architecture →</a>
+  </div>
+  <img src="assets/sf-logo.png" alt="Salesforce" style="height:32px;flex-shrink:0">
+</nav>
+
+<main>
+<div class="slide">
+  <div class="label">Accor GSP · Pilier 2 · Digital Engagement</div>
+  <div class="headline">Chat et messaging natifs<br><em>dans Salesforce.</em></div>
+
+  <div class="diff-strip">
+    <div class="diff-item key">
+      <div class="diff-cat">Traduction</div>
+      <div class="diff-no">✕ Non natif</div>
+      <div class="diff-yes">✓ 20+ langues OOB</div>
+    </div>
+    <div class="diff-item">
+      <div class="diff-cat">IA sur chat</div>
+      <div class="diff-no">✕ Non natif</div>
+      <div class="diff-yes">✓ Agent Assist natif</div>
+    </div>
+    <div class="diff-item">
+      <div class="diff-cat">Données client ALL</div>
+      <div class="diff-no">✕ Données séparées</div>
+      <div class="diff-yes">✓ Contexte complet</div>
+    </div>
+    <div class="diff-item">
+      <div class="diff-cat">Contrat</div>
+      <div class="diff-no">✕ Fournisseur séparé</div>
+      <div class="diff-yes">✓ Inclus dans SC</div>
+    </div>
+  </div>
+
+  <div class="compare">
+    <div class="col col-before">
+      <div class="col-tag tag-b">Aujourd'hui</div>
+      <div class="items">
+        <div class="item"><div class="dot dot-b"></div><div class="item-text">Données hors Salesforce</div></div>
+        <div class="item"><div class="dot dot-b"></div><div class="item-text">Pas de traduction native</div></div>
+        <div class="item"><div class="dot dot-b"></div><div class="item-text">Console et contrat séparés</div></div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num stat-b">110</div>
+        <div class="stat-lbl">pays · agents non multilingues bloqués</div>
+      </div>
+    </div>
+
+    <div class="col col-after">
+      <div class="col-tag tag-a">SF Digital Engagement</div>
+      <div class="items">
+        <div class="item"><div class="dot dot-a"></div><div class="item-text">Profil ALL complet à l'ouverture</div></div>
+        <div class="item"><div class="dot dot-a"></div><div class="item-text">Traduction + Agent Assist en direct</div></div>
+        <div class="item"><div class="dot dot-a"></div><div class="item-text">Console unifiée voix + digital</div></div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-num stat-a">20+</div>
+        <div class="stat-lbl">langues en temps réel, sans développement</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom">
+    <div class="roi-box">
+      <div class="roi-num">€2.0M</div>
+      <div class="roi-lbl">économisés / an</div>
+    </div>
+    <div class="insight">
+      La traduction temps réel <strong>seule justifie la migration.</strong><br>
+      110 pays — c'est une capacité native SF,<br>
+      pas un développement custom.
+    </div>
+  </div>
+  <div class="note">Estimations benchmarks hospitality — à valider avec volume chat réel Accor GSP</div>
+</div>
+</main>
+
+<footer>
+  <div class="f-links">
+    <a href="de-arch.html" class="f-link">→ Architecture technique</a>
+    <a href="agentforce-exec.html" class="f-link">Pilier 03 : Agentforce →</a>
+  </div>
+  <span class="f-note">Salesforce · Accor GSP 2026</span>
+</footer>
+</body>
+</html>

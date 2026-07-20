@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Agentforce + BYOM — Architecture · Accor GSP</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#032D60;--blue:#0070D2;--sky:#00A1E0;--light:#F8FAFC;--border:#E2E8F0;--text:#1E293B;--muted:#64748B;--red:#DC2626;--green:#16A34A;--purple:#7C3AED}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;background:var(--light);color:var(--text)}
+nav{background:var(--navy);padding:0 48px;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.n-back{color:rgba(255,255,255,.65);text-decoration:none;font-size:12px}.n-back:hover{color:white}
+.n-title{color:white;font-size:13px;font-weight:600}
+.n-right{display:flex;gap:10px}
+.n-pill{text-decoration:none;padding:6px 14px;border-radius:5px;font-size:12px;font-weight:700}
+.n-deck{background:rgba(255,255,255,.1);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.2)}.n-deck:hover{background:rgba(255,255,255,.2)}
+.n-exec{background:var(--purple);color:white}.n-exec:hover{opacity:.9}
+.hero{background:white;border-bottom:1px solid var(--border);padding:40px 48px;position:relative;overflow:hidden}
+.hero-inner{max-width:1060px;margin:0 auto}
+.hero-label{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.hero-title{font-size:34px;font-weight:900;color:var(--navy);line-height:1.1;margin-bottom:8px}
+.hero-desc{font-size:15px;color:var(--muted);line-height:1.6}
+.hero-tag{display:inline-block;background:#F5F3FF;border:1px solid #C4B5FD;color:var(--purple);font-size:11px;font-weight:700;padding:4px 12px;border-radius:4px;margin-top:12px}
+.content{max-width:1060px;margin:0 auto;padding:48px}
+.section-label{font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px}
+.label-today{color:var(--red)}.label-sf{color:var(--blue)}
+.arch-compare{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:40px}
+.arch-card{background:white;border:1.5px solid var(--border);border-radius:16px;padding:32px}
+.arch-card.today{border-color:#FCA5A5}
+.arch-card.sf{border-color:#C4B5FD;box-shadow:0 4px 24px rgba(124,58,237,.08)}
+
+/* TODAY: Custom API mess */
+.api-list{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+.api-item{display:flex;align-items:center;gap:12px;background:#FFF5F5;border:1.5px solid #FCA5A5;border-radius:10px;padding:12px 16px}
+.api-icon{font-size:20px;flex-shrink:0}
+.api-name{font-size:13px;font-weight:700;color:var(--text)}
+.api-cost{font-size:11px;color:var(--red);font-weight:600}
+.api-total{background:#FEF2F2;border-radius:10px;padding:12px 16px;text-align:center;margin-top:12px}
+.api-total-n{font-size:28px;font-weight:900;color:var(--red)}
+.api-total-l{font-size:12px;color:var(--muted)}
+.impact-list{display:flex;flex-direction:column;gap:10px;margin-top:16px;padding-top:16px;border-top:1px solid rgba(0,0,0,.06)}
+.impact-item{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text);line-height:1.4}
+.impact-item.pain .imp-icon{color:var(--red)}
+.imp-icon{flex-shrink:0;font-weight:700;font-size:13px;margin-top:1px}
+
+/* SF: Orchestration diagram */
+.orch-diagram{display:flex;flex-direction:column;gap:0;align-items:center}
+.orch-box{border-radius:10px;padding:14px 20px;text-align:center;width:100%;max-width:360px}
+.orch-box.user{background:var(--light);border:1.5px solid var(--border)}
+.orch-box.orch{background:#EFF6FF;border:2px solid var(--blue)}
+.orch-box.trust{background:#FFF7ED;border:2px solid #FD8A3A}
+.orch-box.byom{background:#F5F3FF;border:2px solid var(--purple)}
+.orch-arrow{font-size:14px;color:var(--muted);padding:6px 0;text-align:center;width:100%;max-width:360px}
+.orch-name{font-size:14px;font-weight:800;color:var(--text)}
+.orch-role{font-size:11px;color:var(--muted);margin-top:3px}
+
+.topics-row{display:flex;gap:8px;margin:8px 0;width:100%;max-width:360px}
+.topic-box{flex:1;background:#EFF6FF;border:1.5px solid #BFDBFE;border-radius:8px;padding:10px;text-align:center}
+.topic-name{font-size:11px;font-weight:700;color:var(--blue)}
+.topic-action{font-size:10px;color:var(--muted);margin-top:2px}
+
+.trust-features{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;justify-content:center;width:100%;max-width:360px}
+.trust-tag{background:#FFF7ED;border:1px solid #FD8A3A;color:#9A3412;font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px}
+
+.byom-highlight{background:#F5F3FF;border:1.5px solid #C4B5FD;border-radius:12px;padding:16px 20px;margin-top:16px;display:flex;align-items:center;gap:14px}
+.byom-pill{background:var(--purple);color:white;font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:4px;flex-shrink:0}
+.byom-text{font-size:13px;color:#4C1D95;font-weight:600;line-height:1.4}
+
+.tech-notes{background:white;border:1.5px solid var(--border);border-radius:16px;padding:32px;margin-bottom:40px}
+.tech-notes-title{font-size:13px;font-weight:800;color:var(--navy);margin-bottom:20px}
+.tech-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.tech-item{background:var(--light);border-radius:10px;padding:16px}
+.tech-item-title{font-size:12px;font-weight:800;color:var(--text);margin-bottom:6px}
+.tech-item-text{font-size:12px;color:var(--muted);line-height:1.5}
+.integration-note{background:linear-gradient(135deg,#F5F3FF,#EFF6FF);border:1.5px solid #C4B5FD;border-radius:12px;padding:20px 24px;margin-bottom:24px;display:flex;align-items:center;gap:16px}
+.int-icon{font-size:28px;flex-shrink:0}
+.int-text{font-size:14px;color:var(--navy);line-height:1.5;font-weight:500}
+.int-text strong{font-weight:800}
+footer{border-top:1px solid var(--border);background:white;padding:16px 48px;display:flex;justify-content:space-between;align-items:center}
+.f-links{display:flex;gap:16px}
+.f-link{text-decoration:none;font-size:13px;color:var(--blue);font-weight:600}.f-link:hover{text-decoration:underline}
+.f-note{font-size:11px;color:#CBD5E1;font-style:italic}
+</style>
+</head>
+<body>
+<nav>
+  <a href="index.html" class="n-back">← Accueil</a>
+  <span class="n-title">Pilier 03 · Agentforce + BYOM · Architecture</span>
+  <div class="n-right">
+    <a href="deck.html" class="n-pill n-deck">Présentation</a>
+    <a href="agentforce-exec.html" class="n-pill n-exec">Vue exec</a>
+  </div>
+  <img src="assets/sf-logo.png" alt="Salesforce" style="height:32px;flex-shrink:0">
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-label">Architecture · Pilier 03 · Agentforce + BYOM</div>
+    <div class="hero-title">Agentforce orchestre. AccorGPT génère. SF sécurise.</div>
+    <div class="hero-desc">BYOM (Bring Your Own Model) permet d'enregistrer AccorGPT comme modèle externe dans Agentforce. L'orchestration, le Trust Layer et le déploiement sont SF natif — le modèle reste chez Accor.</div>
+    <span class="hero-tag">✓ Souveraineté AccorGPT préservée · Trust Layer natif SF · Déploiement 3–6 mois</span>
+  </div>
+  <img src="assets/star.png" style="position:absolute;right:48px;bottom:20px;width:52px;opacity:.7;pointer-events:none" aria-hidden="true">
+  <img src="assets/star.png" style="position:absolute;right:100px;bottom:36px;width:34px;opacity:.5;pointer-events:none" aria-hidden="true">
+</div>
+
+<div class="content">
+  <div class="arch-compare">
+
+    <!-- TODAY -->
+    <div class="arch-card today">
+      <div class="section-label label-today">Architecture actuelle — Build interne</div>
+      <div class="api-list">
+        <div class="api-item"><span class="api-icon">🎙️</span><div><div class="api-name">Intégration Voice → AccorGPT</div><div class="api-cost">~6–8 mois · API custom</div></div></div>
+        <div class="api-item"><span class="api-icon">💬</span><div><div class="api-name">Intégration Chat → AccorGPT</div><div class="api-cost">~6–8 mois · API custom</div></div></div>
+        <div class="api-item"><span class="api-icon">📧</span><div><div class="api-name">Intégration Email → AccorGPT</div><div class="api-cost">~6–8 mois · API custom</div></div></div>
+      </div>
+      <div class="api-total">
+        <div class="api-total-n">18–24 mois</div>
+        <div class="api-total-l">pour couvrir tous les canaux · Trust Layer à coder</div>
+      </div>
+      <div class="impact-list">
+        <div class="impact-item pain"><span class="imp-icon">✕</span><span class="imp-text">Chaque canal = un projet séparé, maintenance dédiée</span></div>
+        <div class="impact-item pain"><span class="imp-icon">✕</span><span class="imp-text">Pas de Trust Layer natif — PII masking à implémenter manuellement</span></div>
+        <div class="impact-item pain"><span class="imp-icon">✕</span><span class="imp-text">Audit trail, fallback, monitoring = développement supplémentaire</span></div>
+      </div>
+    </div>
+
+    <!-- SF TARGET -->
+    <div class="arch-card sf">
+      <div class="section-label label-sf">Architecture cible — Agentforce + BYOM</div>
+      <div class="orch-diagram">
+        <div class="orch-box user">
+          <div class="orch-name">Agent / Client</div>
+          <div class="orch-role">Tous canaux : Voice · Chat · Email</div>
+        </div>
+        <div class="orch-arrow">↓</div>
+        <div class="orch-box orch">
+          <div class="orch-name">Agentforce Orchestrator</div>
+          <div class="orch-role">Classification d'intent · Sélection topic</div>
+        </div>
+        <div class="orch-arrow">↓ distribue vers</div>
+        <div class="topics-row">
+          <div class="topic-box"><div class="topic-name">Annulation</div><div class="topic-action">Actions Apex</div></div>
+          <div class="topic-box"><div class="topic-name">Réservation</div><div class="topic-action">Actions Flow</div></div>
+          <div class="topic-box"><div class="topic-name">Info hôtel</div><div class="topic-action">Knowledge</div></div>
+        </div>
+        <div class="orch-arrow">↓ → données vers</div>
+        <div class="orch-box trust">
+          <div class="orch-name">Einstein Trust Layer</div>
+          <div class="orch-role">PII masking · Audit trail · Guardrails</div>
+        </div>
+        <div class="trust-features">
+          <span class="trust-tag">🔒 PII masqué</span>
+          <span class="trust-tag">📋 Audit complet</span>
+          <span class="trust-tag">🛡️ Guardrails topics</span>
+        </div>
+        <div class="orch-arrow">↓ prompt sécurisé vers</div>
+        <div class="orch-box byom">
+          <div class="orch-name">AccorGPT (BYOM)</div>
+          <div class="orch-role">Génération réponse · Reste chez Accor</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="byom-highlight">
+    <div class="byom-pill">BYOM</div>
+    <div class="byom-text"><strong>AccorGPT ne voit que ce que SF lui envoie explicitement.</strong> Le PII masquage se fait dans le Trust Layer avant l'envoi. Aucune donnée CRM ne quitte SF sans être filtrée. Le Responsible AI Committee d'Accor peut auditer chaque prompt envoyé.</div>
+  </div>
+
+  <div class="integration-note">
+    <div class="int-icon">⚙️</div>
+    <div class="int-text">
+      <strong>Enregistrement BYOM :</strong> AccorGPT s'enregistre dans <em>AI Gateway → Model Registry</em> de Salesforce. L'endpoint HTTP, les credentials et les paramètres de routing sont configurés dans Agentforce Studio — pas de code. Disponibilité SF BYOM : Q4 2026 / Q1 2027 — à reconfirmer sur roadmap.
+    </div>
+  </div>
+
+  <div class="tech-notes">
+    <div class="tech-notes-title">⚙️ Notes techniques — pour l'équipe ingénierie</div>
+    <div class="tech-grid">
+      <div class="tech-item">
+        <div class="tech-item-title">BYOM — enregistrement modèle externe</div>
+        <div class="tech-item-text">AccorGPT enregistré via AI Gateway. SF envoie un payload JSON structuré (prompt + contexte filtré). La réponse est retournée au bot/agent dans la console.</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-item-title">Einstein Trust Layer — PII & audit</div>
+        <div class="tech-item-text">Masquage PII automatique avant envoi au modèle. Audit trail stocké dans Event Monitoring SF. Aucun prompt ni réponse stocké côté SF sauf si configuré explicitement.</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-item-title">Topics et Actions — configuration sans code</div>
+        <div class="tech-item-text">Topics configurés dans Agentforce Builder (UI). Actions = Apex invocables ou Flows existants. Pas de développement ML requis — SF orchestre, AccorGPT génère.</div>
+      </div>
+      <div class="tech-item">
+        <div class="tech-item-title">Déploiement par canal</div>
+        <div class="tech-item-text">Un même agent Agentforce peut être déployé sur Voice (via Agent Assist), Chat (via Omnichannel bot), Email (via Case Classification) — sans re-développement.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="f-links">
+    <a href="agentforce-exec.html" class="f-link">← Vue exec</a>
+    <a href="knowledge-arch.html" class="f-link">Pilier 04 : Knowledge Architecture →</a>
+  </div>
+  <span class="f-note">Salesforce · Accor GSP 2026 · Architecture technique</span>
+</footer>
+</body>
+</html>
